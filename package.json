@@ -1,0 +1,14 @@
+{
+  "name": "pocxmlbuilder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ls"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "xmlbuilder": "^13.0.2"
+  }
+}
