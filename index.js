@@ -3,14 +3,14 @@
  * @author Eduardo Ramos
  */
 
-const MODULE_SUFFIX = '-module';
-const LIBRARY_SUFFIX = '-lb';
-const SCA_MODULE_FILENAME = 'sca.module';
-const SCA_LIBRARY_FILENAME = 'sca.library';
+const constantes = require('./lib/Constantes');
 
 var builder = require('xmlbuilder');
 var fs = require('fs');
 var args = process.argv.slice(2);
+var basePath = (process.env.BPEL_BASE_PATH || '');
+
+console.log('Argumentos ' + JSON.stringify(args));
 
 /**
  * @argument args
@@ -150,11 +150,18 @@ createScaXml = (name) => {
  * @argument dirWrkSpace
  * @author Eduardo Ramos
  */
-createBaseBpelProject = (dirWrkSpace) => {
+createBaseBpelProject = (appName) => {
     //------------------------------------------------
     // Cria estrutura de Diretórios do Projeto BPEL
     //------------------------------------------------
-    fs.mkdir(dirWrkSpace, {}, () => {});
+    
+    //var dirWrkSpace = basePath + '/' + appName;
+    var dirWrkSpace = appName;
+
+    fs.mkdir(dirWrkSpace, {}, () => {
+        console.log('Criando diretórios para a aplicação ' + appName);
+    });
+
     createBaseBpelModule(dirWrkSpace);
     createBaseBpelLibrary(dirWrkSpace);
 }
@@ -164,14 +171,22 @@ createBaseBpelProject = (dirWrkSpace) => {
  * @author Eduardo Ramos
  */
 createBaseBpelModule = (dirWrkSpace) => {
-    var moduleName = dirWrkSpace + MODULE_SUFFIX;
+    var moduleName = dirWrkSpace + constantes.MODULE_SUFFIX;
     var dirModule = dirWrkSpace + '/' + moduleName;
     var scaModule = createScaXml(moduleName);
     var projectXml = createModuleProjectXml(moduleName);
     
-    fs.mkdir(dirModule, {}, () => {});
-    fs.writeFile(dirModule + '/' + SCA_MODULE_FILENAME,scaModule, () => {});
-    fs.writeFile(dirModule + '/.project',projectXml, () => {});
+    fs.mkdir(dirModule, {}, () => {
+        console.log('Criando módulo ' + moduleName);
+    });
+    
+    fs.writeFile(dirModule + '/' + constantes.SCA_MODULE_FILENAME,scaModule, () => {
+        console.log('Criando arquivo ' + constantes.SCA_MODULE_FILENAME);
+    });
+
+    fs.writeFile(dirModule + '/' + constantes.PROJECT_FILENAME,projectXml, () => {
+        console.log('Criando arquivo ' + constantes.PROJECT_FILENAME);
+    });
 }
 
 /**
@@ -180,15 +195,22 @@ createBaseBpelModule = (dirWrkSpace) => {
  * @author Eduardo Ramos
  */
 createBaseBpelLibrary = (dirWrkSpace) => {
-    var libraryName = dirWrkSpace + LIBRARY_SUFFIX;
+    var libraryName = dirWrkSpace + constantes.LIBRARY_SUFFIX;
     var dirLib = dirWrkSpace + '/' + libraryName;
     var scaLib = createScaXml(libraryName);
     var projectXml = createLibraryProjectXml(libraryName);
 
-    fs.mkdir(dirLib, {}, () => {});
+    fs.mkdir(dirLib, {}, () => {
+        console.log('Criando Library ' + libraryName);
+    });
 
-    fs.writeFile(dirLib + '/' + SCA_LIBRARY_FILENAME,scaLib, () => {});
-    fs.writeFile(dirLib + '/.project',projectXml, () => {});
+    fs.writeFile(dirLib + '/' + constantes.SCA_LIBRARY_FILENAME,scaLib, () => {
+        console.log('Criando arquivo ' + constantes.SCA_LIBRARY_FILENAME);
+    });
+
+    fs.writeFile(dirLib + '/' + constantes.PROJECT_FILENAME,projectXml, () => {
+        console.log('Criando arquivo ' + constantes.PROJECT_FILENAME);
+    });
 }
 
-main(process.argv);
+main(args);
