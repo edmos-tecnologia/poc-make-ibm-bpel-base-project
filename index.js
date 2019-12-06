@@ -1,20 +1,34 @@
-var builder = require('xmlbuilder');
-var fs = require('fs');
-var _name = process.argv[2];
+/**
+ * 
+ * @author Eduardo Ramos
+ */
 
 const MODULE_SUFFIX = '-module';
 const LIBRARY_SUFFIX = '-lb';
 const SCA_MODULE_FILENAME = 'sca.module';
 const SCA_LIBRARY_FILENAME = 'sca.library';
 
+var builder = require('xmlbuilder');
+var fs = require('fs');
+var args = process.argv.slice(2);
+
 /**
- * 
+ * @argument args
+ * @author Eduardo Ramos
  */
 main = (args) => {
-    var appName = args[2];
+    var appName = args[0];
     createBaseBpelProject(appName);
 }
 
+/**
+ * @argument name
+ * @argument comment
+ * @argument buildCommands
+ * @argument natures
+ * @returns xml
+ * @author Eduardo Ramos
+ */
 createIIDProjectXml = (name, comment = '', buildCommands = [], natures = []) => {
     var buildSpec = makeBuildSpec(buildCommands);
     var obj = {
@@ -35,6 +49,12 @@ createIIDProjectXml = (name, comment = '', buildCommands = [], natures = []) => 
     return xml;
 }
 
+/**
+ * @argument name
+ * @argument arguments
+ * @returns Object
+ * @author Eduardo Ramos
+ */
 makeBuildCommand = (name, arguments = {}) => {
     return {
         name: name,
@@ -42,6 +62,11 @@ makeBuildCommand = (name, arguments = {}) => {
     };
 }
 
+/**
+ * @argument buildCommands
+ * @returns Object
+ * @author Eduardo Ramos
+ */
 makeBuildSpec = (buildCommands = []) => {
     var buildSpec = {
         buildCommand: []
@@ -54,6 +79,11 @@ makeBuildSpec = (buildCommands = []) => {
     return buildSpec;
 }
 
+/**
+ * @argument moduleName
+ * @returns ModuleProjectXml
+ * @author Eduardo Ramos
+ */
 createModuleProjectXml = (moduleName) => {
     var buildCommands = [
         'org.eclipse.wst.common.project.facet.core.builder',
@@ -74,6 +104,11 @@ createModuleProjectXml = (moduleName) => {
     return moduleProjectXml;
 }
 
+/**
+ * @argument libraryName
+ * @returns LibraryProjectXml
+ * @author Eduardo Ramos
+ */
 createLibraryProjectXml = (libraryName) => {
     var buildCommands = [
         'org.eclipse.wst.common.project.facet.core.builder',
@@ -95,7 +130,9 @@ createLibraryProjectXml = (libraryName) => {
 }
 
 /**
- * 
+ * @argument name
+ * @returns SCA Xml
+ * @author Eduardo Ramos
  */
 createScaXml = (name) => {
     var obj = {
@@ -110,7 +147,8 @@ createScaXml = (name) => {
 }
 
 /**
- * 
+ * @argument dirWrkSpace
+ * @author Eduardo Ramos
  */
 createBaseBpelProject = (dirWrkSpace) => {
     //------------------------------------------------
@@ -119,11 +157,11 @@ createBaseBpelProject = (dirWrkSpace) => {
     fs.mkdir(dirWrkSpace, {}, () => {});
     createBaseBpelModule(dirWrkSpace);
     createBaseBpelLibrary(dirWrkSpace);
-
 }
 
 /**
- * 
+ * @argument dirWrkSpace
+ * @author Eduardo Ramos
  */
 createBaseBpelModule = (dirWrkSpace) => {
     var moduleName = dirWrkSpace + MODULE_SUFFIX;
@@ -138,6 +176,8 @@ createBaseBpelModule = (dirWrkSpace) => {
 
 /**
  * 
+ * @argument dirWrkSpace
+ * @author Eduardo Ramos
  */
 createBaseBpelLibrary = (dirWrkSpace) => {
     var libraryName = dirWrkSpace + LIBRARY_SUFFIX;
